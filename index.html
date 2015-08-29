@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Introductory Version Control with Git and GitHub</title>
+
+		<meta name="description" content="An introduction to Git and GitHub for CodeTN student participants and sponsors">
+		<meta name="author" content="Everett Green">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Introductory Version Control</h1>
+					<h3>With Git and GitHub</h3>
+					<p>
+						<small>Presented by <a href="http://everettgreen.net">Everett Green</a> / <a href="http://twitter.com/EverettGreen">@EverettGreen</a></small>
+					</p>
+                    <aside class="notes">
+                        Welcome, my name is Everett Green, and I'd like to thank you for joining me to
+                        learn about code version control with Git and GitHub. My presentation skills have
+                        atrophied, so please bear with me today, and feel free to share your feedback with me
+                        after the presentation. You can find me on Twitter @EverettGreen.
+                    </aside>
+				</section>
+
+				<section>
+					<h2>Who am I?</h2>
+					<ul>
+                        <li>Senior Web Developer / Team Lead
+                            <br>
+                            Radio Systems Corporation</li>
+                        <li>LAMP, E-commerce</li>
+                        <li>PSCC Alumnus, 2010</li>
+					</ul>
+                    <aside class="notes">
+                        Who am I? I am a Senior Web Developer and Development Team Lead at Radio Systems Corporation,
+                        located here in Knoxville. RSC manufactures pet products, you may be familiar with our PetSafe
+                        and Invisible Fence brands. I primarily work on the PetSafe and SportDOG brand websites and
+                        e-commerce stores. Our team currently uses a LAMP stack, similar to what CodeTN will provide.
+                        LAMP stands for Linux, Apache, MySQL, and PHP. We use a Content Management System (CMS) called
+                        ExpressionEngine, and an E-commerce platform called Magento, both of which are written in PHP.
+                        I am also a graduate of Pellissippi State's Computer Science program.
+                    </aside>
+				</section>
+
+
+				<section>
+                    <section>
+                        <h1>Why do we need a Version Control System (VCS)?</h1>
+                    </section>
+					<section>
+						<h2>Old and busted... FTP</h2>
+                        <p>Where FTP fails:</p>
+						<ul>
+                            <li class="fragment">Scale</li>
+                            <li class="fragment">Collaboration
+                                <ul>
+                                    <li class="fragment">File Locking / IDE</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Historical reference</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>When we're first learning web development basics, and working by ourselves, we typically
+                            start out using an FTP application to connect to our webserver and upload files and
+                            overwrite existing files with our changes. As we grow, we have a local instance of our
+                            site so we can test changes before uploading them to the live site. Pretty soon, your
+                            website has dozens of interconnected files that each depend on one another for your site to
+                            function. You start developing features that rely on the simultaneous release of many files
+                            in order for things to keep working right - your style updates to the stylesheet, maybe
+                            some markup changes in your templates, and updated application logic. Somewhere along the
+                            way, you forget to make a note of that template file you changed on your local instance,
+                            and it doesn't get migrated to the server - oops! The FTP method for releasing code does
+                            not scale.</p>
+
+                            <p>You realize you need help with your site so you set your friend up with FTP access,
+                            they download your source files, and set to work on a new feature. A week later, they
+                            upload their copy of the stylesheet with their changes, overwriting the new features
+                            you've been adding all week with their local copy! FTP is not a suitable method for
+                            teams to collaborate on code. Some Integrated Development Environments (IDEs) like
+                            Dreamweaver bake in functionality that relies on regular synchronization with the remote
+                            server, and a system of lock files that indicate a particular file is being edited by
+                            someone else. But even those tools fall short when your teammate forgets to unlock a file
+                            and you're left wondering if it's safe to push your changes.</p>
+
+                            <p>After a while, you start reading some User Experience blogs and you decide hop on the
+                            latest design bandwagon. You refactor your whole site to a trendy new yellow on black
+                            colorscheme with flat button styles and links with no underline. You manage to release
+                            your masterpiece via FTP and you're met with plummeting traffic numbers and complaints
+                            from your visitors, telling you the new colorscheme stinks and they can't figure out how
+                            to navigate your site anymore. You start wishing you had taken backups of the code before
+                            you changed it, or commented out components instead of replacing them. As time goes on,
+                            and you find yourself wading through dozens of old backup files and defunct, commented-out
+                            code, you see the light...</p>
+                        </aside>
+					</section>
+					<section>
+						<h2>There's gotta be a better way!</h2>
+						<img width="299" height="193" data-src="/images/better-way.gif" alt="better way infomercial gif">
+					</section>
+				</section>
+
+                <section>
+                    <section>
+                        <h1>What is Code Versioning?</h1>
+                        <aside class="notes">
+                            Enter, Version Control Systems. A Version Control System is a tool that maintains an easily
+                            referenced history of a codebase.
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Decisions, decisions...</h2>
+                        <ul>
+                            <li>Git, SVN, Mercurial, CVS, TFS</li>
+                            <li>Git is fast, distributed, and flexible</li>
+                        </ul>
+                        <aside class="notes">
+                            There are many options for version control systems, but CodeTN have settled on Git. Git is
+                            exceedingly popular, thanks in part to being the brainchild of Linux Kernel founder, Linus
+                            Torvalds. After starting out with Subversion (SVN) in 2008, the RSC E-commerce team switched
+                            to Git, seeking better performance, fewer conflicts, and more flexibility. Initially, we
+                            hosted our own Git server, but later transitioned to GitHub to store our code in the cloud.
+                            Git can be used to collaborate and keep track of changes of any sort of files, including
+                            images, but it works best when used to track changes in text-based files, like codefiles.
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Common terms</h2>
+                        <ul>
+                            <li class="fragment">Repository (repo)</li>
+                            <li class="fragment">Delta (diff)</li>
+                            <li class="fragment">Commit</li>
+                            <li class="fragment">Pointers:
+                                <ul>
+                                    <li>Branch</li>
+                                    <li>Tag</li>
+                                    <li>HEAD</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">Merge</li>
+                            <li class="fragment">Remote</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Here are some important terms we'll be using in our discussion... a repository or "repo"
+                            refers to a code-versioned codebase. You might decide to create your repo at the site-level,
+                            at the application-level (like our team does with Magento and ExpressionEngine), or even
+                            at a more granular level, such as a specific plugin or extension that is part of a larger
+                            application. In Git, a repository within a repository is called a submodule.</p>
+
+                            <p>A delta, usually called a "diff", is how Git tracks changes at the file level in the
+                            different versions of your codebase. Git compares the old file and the new, line by
+                            line, and can understand what has changed in the new file.</p>
+
+                            <p>A commit is essentially a snapshot of the codebase at a given moment. When you take
+                            a snapshot, or "commit your code," Git is tracking which files changed and the details of
+                            those changes, or "diffs." Git generates a 32-character reference code for each commit,
+                            called a commit hash. A responsible developer also stores a commit message with each
+                            commit, describing the changes it references. A commit can be made for a single change
+                            or it can include changes from the entire codebase.</p>
+
+                            <p>In Git, a branch is technically just a reference, or pointer, to a single commit. It
+                            might be easier to think of it as a timeline of commits. Every commit knows the commit
+                            hash of its parent, so a sequence of commits form a timeline. If two commits share the same
+                            parent commit, then you can easily distinguish the two by a branch name instead of by
+                            their individual commit hashes. Committing to a branch moves the branch pointer to the new
+                            commit, and the two branches diverge as the timeline extends with new commits. Sometimes
+                            you need to refer to a specific commit, and using a branch name isn't suitable because
+                            it is a moving pointer. In this case, you can "tag" a commit, which will remain a fixed
+                            pointer to that commit's hash. Tags are useful for identifying release-worthy commits.
+                            Another type of pointer is the special "HEAD" pointer, which points to the commit currently
+                            represented or "tracked" by your codebase. You can "check out" different commits by
+                            issuing the checkout command for a branch, commit hash, or tag, and Git will update your
+                            local repository to reflect the state your code was in when the associated snapshot was
+                            captured.</p>
+
+                            <p>How do you bring two diverged branches of code back together? By creating a special
+                            "merge" commit. This commit has two parents, and combines all the changes that were made to
+                            each branch, all the way back to the point where they diverged. Both branches still exist
+                            in the repository. If we merge branch A into branch B, then branch B will contain all the
+                            changes performed in branch A, however branch A will remain unchanged. Subsequent commits
+                            to branch A would continue to track in a separate timeline.</p>
+
+                            <p>All of the above exist on your computer and can maintain a history of your local
+                            repository. In order to collaborate, you need to introduce a remote instance of the
+                            repository, sometimes referred to as an origin. Git can fetch changes from and push changes
+                            to the remote repository. If Git finds new commits on the remote that don't exist in your
+                            local repository, Git will require you to fetch the newer changes down to update your local.
+                            This remote repository could be a machine you control, that runs the git server software,
+                            or it could be located in the cloud, on Software as a Service such as GitHub or BitBucket.</p>
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Common workflow</h2>
+                        <ul>
+                            <li>Branches: master, development, &lt;feature&gt;</li>
+                            <li>Keep development branch clean, but master pristine</li>
+                            <li>Tag releases</li>
+                        </ul>
+                        <div style="text-align: left">
+                        More:
+                        <br>
+                        <a href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a></div>
+                        <aside class="notes">
+                            <p>By default, git will initialize a "master" branch. You and your team will need to agree
+                            on what other branches you'll have beyond master. You may want to do some research, because
+                            they can get pretty complicated, especially those designed for large, enterprise teams.
+                            A good starting point would be to immediately create a "development" branch in your repo.
+                            Then, when beginning work on a new feature, create a "feature branch" off of the development
+                            branch with a name that describes your feature. When you complete work on your feature,
+                            merge your feature branch into the development branch for more thorough testing in the
+                            context of the rest of the team's changes. When the team has finished several features and
+                            is ready to release them to their server, a team member would merge the development branch
+                            up to the master branch, and tag the commit for easy checkout. The distinction between
+                            development and master branches is important - imagine you release to production, and then
+                            several features that haven't been fully tested or aren't ready for production get merged
+                            to your master branch, and then you find a bug on production that you must quickly address!
+                            With a good workflow, you can avoid letting a scenario like that become a problem because
+                            your feature branches would be merged into development, leaving the master branch open for
+                            bug fixing, also called "hotfixing."</p>
+                            <p>These are more advanced techniques, and are not required by the contest, but they are
+                            industry standard and strongly encouraged.</p>
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Tips &amp; Tricks</h2>
+                        <ul>
+                            <li class="fragment">&nbsp;&nbsp;No secret stuff in Git!!</li>
+                            <li class="fragment">+ Avoid versioning binary / large files</li>
+                            <li class="fragment">= Create a .gitignore file!</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>Some parts of your application will contain secrets, such as database connection
+                            credentials. It is in your team's best interests to keep environment settings, private
+                            data, and secret credentials out of Git. This way you can more comfortably share your
+                            repository with others without giving away the keys to the castle (although exposing
+                            your code repository, even if it contains no credentials, could give hackers a cheat sheet
+                            for compromising your application). Also, as I mentioned before, Git works best for text
+                            based files. While it can store binary files like images, or even video, doing so can
+                            bloat your Git object cache, which is stored in a ".git" directory in the root directory
+                            of your repository. This bloat negatively impacts Git's performance.</p>
+                            <p>To combat these issues, you can use a special file with filename ".gitignore". This
+                            file contains a list of file paths, file extensions, and filenames that should not be
+                            tracked in Git. There is also the inverse, called a .gitkeep file. We can look at one in
+                            the Laravel project's storage directory during the demo.</p>
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Tips 'n Tricks part Deux: The Conflict</h2>
+                        <ul>
+                            <li class="fragment">Pull before you push, every time</li>
+                            <li class="fragment">Regularly rebase</li>
+                            <li class="fragment">Stash</li>
+                        </ul>
+                        <aside class="notes">
+                            <p>A merge conflict occurs when two commits that modify the same file or files are merged
+                                and the changes cannot be automatically untangled by Git. Avoiding merge conflicts is
+                                infinitely better than dealing with them. Getting in the habit of pulling down new
+                                changes prior to pushing your changes up, regularly rebasing your feature branch on the
+                                remote changes, and good code organization that limits team overlap can help avoid
+                                conflicts and improve your experience with Git.</p>
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Tip Jar: The Tricking</h2>
+                        <h3>AKA - keep it clean!</h3>
+                        <ul>
+                            <li class="fragment highlight-current-red">Carefully review every file in every commit</li>
+                            <li class="fragment">Prune disused branches</li>
+                            <li class="fragment">Commit timelines only move forward<sup>*</sup></li>
+                        </ul>
+                        <p><sup>*</sup> unless you have not yet pushed your commit to the remote repository</p>
+                        <aside class="notes">
+                            <p>In the same vein as avoiding merge conflicts, you'll save your sanity by carefully
+                                reviewing each file in every commit to ensure you haven't left any debug code in there,
+                                or accidentally modified the wrong file. Commits can be reverted, but the reversion
+                                is tracked as a new commit, so it's better to just avoid committing without careful
+                                review of your changes. Don't commit too often, but commit often
+                                enough to track your progress. Don't push a broken application to the remote repo,
+                                your teammates will thank you! Keep a clean repository and the judges will
+                                thank you too!</p>
+                        </aside>
+                    </section>
+                </section>
+
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>
+                        Find this presentation online: <a href="https://github.com/everettgreen">https://github.com/everettgreen</a>
+					</p>
+				</section>
+
+                <section>
+                    <h2>Demo Topics</h2>
+                    <ul>
+                        <li>Installing GitHub Desktop</li>
+                        <li>PHPStorm EAP with built-in VCS</li>
+                        <li>Forking Laravel</li>
+                        <li>Creating suggested workflow branches (and two feature branches for merge and rebase demos)</li>
+                        <li>Committing a change (add/remove/change, create/delete/rename)</li>
+                        <li>Pushing a change</li>
+                        <li>Collaborating on a commit in GitHub</li>
+                        <li>Merging a branch</li>
+                        <li>Tagging a commit</li>
+                        <li>Checking out a branch/commit/tag</li>
+                        <li>Rebasing a branch</li>
+                        <li>Slack+GitHub web hooks</li>
+                    </ul>
+                </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
